@@ -1,84 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>card-foil demo</title>
+  <title>card-foil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
+    :root[data-theme="dark"] {
+      --bg: #111;
+      --bg2: #1a1a1a;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --text-muted: #666;
+      --toggle-bg: #222;
+      --toggle-border: #333;
+      --thumb: #fff;
+    }
+    :root[data-theme="light"] {
+      --bg: #f1f1f1;
+      --bg2: #e4e4e4;
+      --border: #d0d0d0;
+      --text: #111;
+      --text-muted: #888;
+      --toggle-bg: #ddd;
+      --toggle-border: #ccc;
+      --thumb: #333;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      background: #111;
+      background: var(--bg);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2rem;
-      padding: 3rem;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      color: #fff;
+      gap: 3rem;
+      padding: 3rem 2rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--text);
+      transition: background 0.2s, color 0.2s;
     }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 900px;
+    }
+
     h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #aaa;
-      letter-spacing: 0.05em;
+      font-size: 1.1rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      color: var(--text-muted);
     }
+
+    /* Theme toggle */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+    .switch {
+      position: relative;
+      width: 36px;
+      height: 20px;
+    }
+    .switch input { display: none; }
+    .track {
+      position: absolute;
+      inset: 0;
+      background: var(--toggle-bg);
+      border: 1px solid var(--toggle-border);
+      border-radius: 10px;
+      transition: 0.2s;
+    }
+    .thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 12px;
+      height: 12px;
+      background: var(--thumb);
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    input:checked + .track .thumb {
+      transform: translateX(16px);
+    }
+
+    /* Cards */
     .cards {
       display: flex;
-      gap: 2rem;
+      gap: 2.5rem;
       flex-wrap: wrap;
       justify-content: center;
     }
     .card-wrap {
       border-radius: 4.8% / 3.4%;
-      overflow: hidden;
-      cursor: pointer;
+      overflow: visible;
+      cursor: default;
       position: relative;
       display: inline-block;
     }
     .card-wrap img {
       display: block;
-      width: 240px;
+      width: 220px;
       border-radius: 4.8% / 3.4%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     }
+
+    /* Controls */
     .controls {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 1.5rem;
-      color: #888;
-      font-size: 0.875rem;
+      gap: 1.25rem;
+      width: 100%;
+      max-width: 400px;
     }
-    input[type=range] { width: 120px; accent-color: #a78bfa; }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+    }
+    .control-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      min-width: 80px;
+    }
+
+    /* Slider */
+    .slider-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    input[type=range] {
+      flex: 1;
+      -webkit-appearance: none;
+      height: 2px;
+      background: var(--border);
+      border-radius: 1px;
+      outline: none;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--text);
+      cursor: pointer;
+    }
+    .intensity-value {
+      font-size: 0.8rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      min-width: 2.5rem;
+      text-align: right;
+    }
+
+    /* Toggle buttons */
+    .toggle-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .toggle-btn {
+      padding: 0.3rem 0.75rem;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-family: inherit;
+      border: 1px solid var(--toggle-border);
+      border-radius: 4px;
+      background: var(--toggle-bg);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .toggle-btn.active {
+      background: var(--text);
+      color: var(--bg);
+      border-color: var(--text);
+    }
   </style>
 </head>
 <body>
-  <h1>card-foil ✨</h1>
+  <header>
+    <h1>card-foil</h1>
+    <label class="theme-toggle">
+      <span>Light</span>
+      <div class="switch">
+        <input type="checkbox" id="theme-check">
+        <div class="track"><div class="thumb"></div></div>
+      </div>
+    </label>
+  </header>
+
   <div class="cards">
     <div class="card-wrap" id="c1">
-      <img src="https://cards.scryfall.io/normal/front/b/d/bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd.jpg" alt="Black Lotus" crossorigin="anonymous">
+      <img src="https://cards.scryfall.io/normal/front/b/d/bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd.jpg" alt="Black Lotus">
     </div>
     <div class="card-wrap" id="c2">
-      <img src="https://cards.scryfall.io/normal/front/2/3/2398892d-28e9-4009-81ec-0d544af79d2b.jpg" alt="Ancestral Recall" crossorigin="anonymous">
+      <img src="https://cards.scryfall.io/normal/front/2/3/2398892d-28e9-4009-81ec-0d544af79d2b.jpg" alt="Ancestral Recall">
     </div>
     <div class="card-wrap" id="c3">
-      <img src="https://cards.scryfall.io/normal/front/7/0/70901356-3266-4bd9-aacc-f06c27271de5.jpg" alt="Time Walk" crossorigin="anonymous">
+      <img src="https://cards.scryfall.io/normal/front/7/0/70901356-3266-4bd9-aacc-f06c27271de5.jpg" alt="Time Walk">
     </div>
     <div class="card-wrap" id="c4">
-      <img src="https://cards.scryfall.io/normal/front/e/a/ea1feac0-d3a7-45eb-9719-1cdaf51ea0b6.jpg" alt="Mox Sapphire" crossorigin="anonymous">
+      <img src="https://cards.scryfall.io/normal/front/e/a/ea1feac0-d3a7-45eb-9719-1cdaf51ea0b6.jpg" alt="Mox Sapphire">
     </div>
   </div>
+
   <div class="controls">
-    <label>Intensity
-      <input type="range" id="intensity" min="0" max="2" step="0.05" value="1">
-    </label>
-    <label><input type="checkbox" id="tilt" checked> Tilt</label>
-    <label><input type="checkbox" id="specular" checked> Specular</label>
+    <div class="control-row">
+      <span class="control-label">Intensity</span>
+      <div class="slider-wrap">
+        <input type="range" id="intensity" min="0" max="2" step="0.05" value="1">
+        <span class="intensity-value" id="intensity-val">1.00</span>
+      </div>
+    </div>
+    <div class="control-row">
+      <span class="control-label">Options</span>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btn-tilt">Tilt</button>
+        <button class="toggle-btn active" id="btn-specular">Specular</button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
-    // Inline the CardFoil class so the demo works without a build step
     const GRADIENT = `repeating-linear-gradient(
       110deg,
       transparent 0%,
@@ -101,7 +268,7 @@
       }
       .cf-overlay {
         position: absolute; inset: 0; pointer-events: none;
-        border-radius: inherit;
+        border-radius: 4.8% / 3.4%;
         background: ${GRADIENT};
         background-size: 200% 100%;
         mix-blend-mode: screen;
@@ -112,22 +279,19 @@
     class CardFoil {
       constructor(el, { intensity = 1, tilt = true, specular = true } = {}) {
         this.el = el; this.intensity = intensity; this.tilt = tilt; this.specular = specular;
-        el.style.position = 'relative';
 
         this._foil = document.createElement('div');
         this._foil.className = 'cf-overlay';
         this._foil.style.opacity = intensity;
         el.appendChild(this._foil);
 
-        if (specular) {
-          this._spec = document.createElement('div');
-          Object.assign(this._spec.style, {
-            position: 'absolute', inset: '0', pointerEvents: 'none',
-            borderRadius: 'inherit', mixBlendMode: 'overlay', opacity: '0',
-            transition: 'opacity 0.2s',
-          });
-          el.appendChild(this._spec);
-        }
+        this._spec = document.createElement('div');
+        Object.assign(this._spec.style, {
+          position: 'absolute', inset: '0', pointerEvents: 'none',
+          borderRadius: '4.8% / 3.4%', mixBlendMode: 'overlay', opacity: '0',
+          transition: 'opacity 0.2s',
+        });
+        el.appendChild(this._spec);
 
         this._onMove = this._onMove.bind(this);
         this._onLeave = this._onLeave.bind(this);
@@ -146,7 +310,7 @@
           this.el.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`;
           this.el.style.transition = 'transform 0.05s';
         }
-        if (this._spec) {
+        if (this.specular) {
           this._spec.style.opacity = '1';
           this._spec.style.background = `radial-gradient(circle at ${mx*100}% ${my*100}%, rgba(255,255,255,0.35) 0%, transparent 55%)`;
         }
@@ -155,29 +319,47 @@
       _onLeave() {
         this._foil.style.backgroundPosition = '';
         if (this.tilt) { this.el.style.transform = ''; this.el.style.transition = 'transform 0.4s ease'; }
-        if (this._spec) this._spec.style.opacity = '0';
+        this._spec.style.opacity = '0';
       }
 
       setIntensity(v) { this.intensity = v; this._foil.style.opacity = v; }
-      setTilt(v) { this.tilt = v; if (!v) this.el.style.transform = ''; }
-      setSpecular(v) { this.specular = v; if (this._spec) this._spec.style.display = v ? '' : 'none'; }
+      setTilt(v) { this.tilt = v; if (!v) { this.el.style.transform = ''; } }
+      setSpecular(v) { this.specular = v; if (!v) this._spec.style.opacity = '0'; }
       destroy() {
         this.el.removeEventListener('mousemove', this._onMove);
         this.el.removeEventListener('mouseleave', this._onLeave);
-        this._foil.remove(); this._spec?.remove();
+        this._foil.remove(); this._spec.remove();
       }
     }
 
     const foils = ['c1','c2','c3','c4'].map(id => new CardFoil(document.getElementById(id)));
 
-    document.getElementById('intensity').addEventListener('input', e => {
-      foils.forEach(f => f.setIntensity(+e.target.value));
+    // Intensity slider
+    const slider = document.getElementById('intensity');
+    const valDisplay = document.getElementById('intensity-val');
+    slider.addEventListener('input', e => {
+      const v = +e.target.value;
+      valDisplay.textContent = v.toFixed(2);
+      foils.forEach(f => f.setIntensity(v));
     });
-    document.getElementById('tilt').addEventListener('change', e => {
-      foils.forEach(f => f.setTilt(e.target.checked));
-    });
-    document.getElementById('specular').addEventListener('change', e => {
-      foils.forEach(f => f.setSpecular(e.target.checked));
+
+    // Toggle buttons
+    function makeToggle(btnId, setter) {
+      const btn = document.getElementById(btnId);
+      let on = true;
+      btn.addEventListener('click', () => {
+        on = !on;
+        btn.classList.toggle('active', on);
+        foils.forEach(f => setter(f, on));
+      });
+    }
+    makeToggle('btn-tilt', (f, v) => f.setTilt(v));
+    makeToggle('btn-specular', (f, v) => f.setSpecular(v));
+
+    // Theme toggle
+    const themeCheck = document.getElementById('theme-check');
+    themeCheck.addEventListener('change', () => {
+      document.documentElement.setAttribute('data-theme', themeCheck.checked ? 'light' : 'dark');
     });
   </script>
 </body>
