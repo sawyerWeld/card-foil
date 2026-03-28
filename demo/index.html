@@ -3,479 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Card Foil Demo</title>
+  <title>card-foil demo</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #0a0a0a;
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      padding: 2rem;
+      background: #111;
       min-height: 100vh;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 2rem;
-      font-size: 2.5rem;
-      background: linear-gradient(135deg, #ffd700, #00ffff, #ff00ff);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .controls {
-      max-width: 800px;
-      margin: 0 auto 3rem;
-      padding: 1.5rem;
-      background: #1a1a1a;
-      border-radius: 12px;
-      border: 1px solid #333;
-    }
-
-    .control-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .control-group:last-child {
-      margin-bottom: 0;
-    }
-
-    .control-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #aaa;
-    }
-
-    .slider-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    input[type="range"] {
-      flex: 1;
-      height: 6px;
-      background: #333;
-      border-radius: 3px;
-      outline: none;
-      -webkit-appearance: none;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      background: #00ffff;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    input[type="range"]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
-      background: #00ffff;
-      border-radius: 50%;
-      cursor: pointer;
-      border: none;
-    }
-
-    .slider-value {
-      min-width: 50px;
-      text-align: right;
-      font-family: monospace;
-      color: #00ffff;
-    }
-
-    .finish-buttons {
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .finish-btn {
-      padding: 0.75rem 1.5rem;
-      background: #2a2a2a;
-      border: 2px solid #444;
-      border-radius: 8px;
-      color: #fff;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .finish-btn:hover {
-      background: #333;
-      border-color: #666;
-    }
-
-    .finish-btn.active {
-      background: #00ffff;
-      color: #000;
-      border-color: #00ffff;
-    }
-
-    .cards-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .card-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1rem;
+      justify-content: center;
+      gap: 2rem;
+      padding: 3rem;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #fff;
     }
-
-    .card {
-      position: relative;
-      width: 100%;
-      max-width: 300px;
-      aspect-ratio: 5/7;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-      cursor: pointer;
-    }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .card-label {
-      font-size: 1.1rem;
+    h1 {
+      font-size: 1.5rem;
       font-weight: 600;
-      text-align: center;
       color: #aaa;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
     }
-
-    /* Inline card-foil.css */
-    .card-foil-overlay {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      border-radius: inherit;
+    .cards {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .card-wrap {
+      border-radius: 4.8% / 3.4%;
       overflow: hidden;
-      opacity: var(--foil-intensity, 1);
+      cursor: pointer;
+      position: relative;
+      display: inline-block;
     }
-
-    .card-foil-overlay::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--foil-gradient);
-      background-size: 200% 200%;
-      background-position: calc(50% + var(--mx, 0.5) * 50%) calc(50% + var(--my, 0.5) * 50%);
-      mix-blend-mode: screen;
-      animation: foil-shimmer 3s ease-in-out infinite;
-      transition: background-position 0.1s ease-out;
+    .card-wrap img {
+      display: block;
+      width: 240px;
+      border-radius: 4.8% / 3.4%;
     }
-
-    @media (prefers-reduced-motion: reduce) {
-      .card-foil-overlay::before {
-        animation: none;
-      }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      color: #888;
+      font-size: 0.875rem;
     }
-
-    .card-foil-overlay::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(
-        circle at calc(var(--mx, 0.5) * 100%) calc(var(--my, 0.5) * 100%),
-        rgba(255, 255, 255, 0.8) 0%,
-        rgba(255, 255, 255, 0.2) 20%,
-        transparent 60%
-      );
-      mix-blend-mode: overlay;
-      opacity: var(--specular-opacity, 0);
-      transition: opacity 0.15s ease-out;
-    }
-
-    .card-foil-overlay.specular::after {
-      opacity: 1;
-    }
-
-    .card-foil-overlay.finish-foil {
-      --foil-gradient: linear-gradient(
-        135deg,
-        #ffd700 0%,
-        #00ffff 15%,
-        #ff00ff 30%,
-        #00ff00 45%,
-        #ff8800 60%,
-        #ffd700 75%,
-        #00ffff 90%,
-        #ff00ff 100%
-      );
-    }
-
-    .card-foil-overlay.finish-etched {
-      --foil-gradient: linear-gradient(
-        135deg,
-        #e0e0e0 0%,
-        #ffffff 20%,
-        #c0c0c0 40%,
-        #f0f0f0 60%,
-        #d0d0d0 80%,
-        #ffffff 100%
-      );
-    }
-
-    .card-foil-overlay.finish-galaxy {
-      --foil-gradient: linear-gradient(
-        135deg,
-        #1a0033 0%,
-        #4d0099 15%,
-        #0066cc 30%,
-        #6600cc 45%,
-        #000066 60%,
-        #9900ff 75%,
-        #0033cc 90%,
-        #1a0033 100%
-      );
-    }
-
-    .card-foil-overlay.finish-oil-slick {
-      --foil-gradient: linear-gradient(
-        135deg,
-        #ff0080 0%,
-        #00ffff 12%,
-        #8000ff 25%,
-        #ffff00 37%,
-        #00ff80 50%,
-        #ff0080 62%,
-        #0080ff 75%,
-        #ff00ff 87%,
-        #00ffff 100%
-      );
-    }
-
-    @keyframes foil-shimmer {
-      0%, 100% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-    }
-
-    .card-foil-tilt {
-      transform-style: preserve-3d;
-      perspective: 600px;
-      transition: transform 0.3s ease-out;
-    }
-
-    .card-foil-tilt.tilting {
-      transform: 
-        rotateX(calc(var(--tilt-y, 0) * 15deg)) 
-        rotateY(calc(var(--tilt-x, 0) * 15deg));
-      transition: transform 0.1s ease-out;
-    }
+    input[type=range] { width: 120px; accent-color: #a78bfa; }
   </style>
 </head>
 <body>
-  <h1>✨ Card Foil Demo</h1>
-
-  <div class="controls">
-    <div class="control-group">
-      <label>Finish Type</label>
-      <div class="finish-buttons">
-        <button class="finish-btn active" data-finish="foil">Foil</button>
-        <button class="finish-btn" data-finish="etched">Etched</button>
-        <button class="finish-btn" data-finish="galaxy">Galaxy</button>
-        <button class="finish-btn" data-finish="oil-slick">Oil Slick</button>
-      </div>
+  <h1>card-foil ✨</h1>
+  <div class="cards">
+    <div class="card-wrap" id="c1">
+      <img src="https://cards.scryfall.io/normal/front/b/d/bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd.jpg" alt="Black Lotus" crossorigin="anonymous">
     </div>
-
-    <div class="control-group">
-      <label>Intensity</label>
-      <div class="slider-container">
-        <input type="range" id="intensity" min="0" max="2" step="0.1" value="1">
-        <span class="slider-value" id="intensity-value">1.0</span>
-      </div>
+    <div class="card-wrap" id="c2">
+      <img src="https://cards.scryfall.io/normal/front/2/e/2e6f2b09-3b99-4e04-9e7a-5a4d48aaddbb.jpg" alt="Ancestral Recall" crossorigin="anonymous">
+    </div>
+    <div class="card-wrap" id="c3">
+      <img src="https://cards.scryfall.io/normal/front/f/6/f6d2649e-5e15-4a50-8b41-3d7be3f0ec65.jpg" alt="Time Walk" crossorigin="anonymous">
+    </div>
+    <div class="card-wrap" id="c4">
+      <img src="https://cards.scryfall.io/normal/front/b/f/bf43f7f6-9987-4e89-a7f3-e5b91bfdb28c.jpg" alt="Mox Sapphire" crossorigin="anonymous">
     </div>
   </div>
-
-  <div class="cards-container">
-    <div class="card-wrapper">
-      <div class="card" data-card="0">
-        <img src="https://cards.scryfall.io/normal/front/b/d/bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd.jpg" alt="Black Lotus">
-      </div>
-      <div class="card-label">Black Lotus</div>
-    </div>
-
-    <div class="card-wrapper">
-      <div class="card" data-card="1">
-        <img src="https://cards.scryfall.io/normal/front/2/e/2e6f2b09-3b99-4e04-9e7a-5a4d48aaddbb.jpg" alt="Ancestral Recall">
-      </div>
-      <div class="card-label">Ancestral Recall</div>
-    </div>
-
-    <div class="card-wrapper">
-      <div class="card" data-card="2">
-        <img src="https://cards.scryfall.io/normal/front/f/6/f6d2649e-5e15-4a50-8b41-3d7be3f0ec65.jpg" alt="Time Walk">
-      </div>
-      <div class="card-label">Time Walk</div>
-    </div>
-
-    <div class="card-wrapper">
-      <div class="card" data-card="3">
-        <img src="https://cards.scryfall.io/normal/front/b/f/bf43f7f6-9987-4e89-a7f3-e5b91bfdb28c.jpg" alt="Mox Sapphire">
-      </div>
-      <div class="card-label">Mox Sapphire</div>
-    </div>
+  <div class="controls">
+    <label>Intensity
+      <input type="range" id="intensity" min="0" max="2" step="0.05" value="1">
+    </label>
+    <label><input type="checkbox" id="tilt" checked> Tilt</label>
+    <label><input type="checkbox" id="specular" checked> Specular</label>
   </div>
 
   <script type="module">
-    // Inline CardFoil class
+    // Inline the CardFoil class so the demo works without a build step
+    const GRADIENT = `repeating-linear-gradient(
+      110deg,
+      transparent 0%,
+      rgba(255, 200, 50, 0.25) 8%,
+      rgba(100, 220, 255, 0.18) 16%,
+      rgba(200, 100, 255, 0.15) 24%,
+      rgba(100, 255, 150, 0.18) 32%,
+      rgba(255, 150, 50, 0.15) 40%,
+      transparent 50%
+    )`;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes foil-shift {
+        0% { background-position: 0% center; }
+        100% { background-position: 100% center; }
+      }
+      @media (prefers-reduced-motion: no-preference) {
+        .cf-overlay { animation: foil-shift 20s linear infinite; }
+      }
+      .cf-overlay {
+        position: absolute; inset: 0; pointer-events: none;
+        border-radius: inherit;
+        background: ${GRADIENT};
+        background-size: 200% 100%;
+        mix-blend-mode: screen;
+      }
+    `;
+    document.head.appendChild(style);
+
     class CardFoil {
-      constructor(element, options = {}) {
-        this.element = element;
-        this.options = {
-          finish: 'foil',
-          intensity: 1.0,
-          tilt: true,
-          shimmer: true,
-          specular: true,
-          ...options
-        };
+      constructor(el, { intensity = 1, tilt = true, specular = true } = {}) {
+        this.el = el; this.intensity = intensity; this.tilt = tilt; this.specular = specular;
+        el.style.position = 'relative';
 
-        this.overlay = null;
-        this.boundHandlers = {
-          mouseMove: this.handleMouseMove.bind(this),
-          mouseLeave: this.handleMouseLeave.bind(this),
-        };
+        this._foil = document.createElement('div');
+        this._foil.className = 'cf-overlay';
+        this._foil.style.opacity = intensity;
+        el.appendChild(this._foil);
 
-        this.init();
+        if (specular) {
+          this._spec = document.createElement('div');
+          Object.assign(this._spec.style, {
+            position: 'absolute', inset: '0', pointerEvents: 'none',
+            borderRadius: 'inherit', mixBlendMode: 'overlay', opacity: '0',
+            transition: 'opacity 0.2s',
+          });
+          el.appendChild(this._spec);
+        }
+
+        this._onMove = this._onMove.bind(this);
+        this._onLeave = this._onLeave.bind(this);
+        el.addEventListener('mousemove', this._onMove);
+        el.addEventListener('mouseleave', this._onLeave);
       }
 
-      init() {
-        this.overlay = document.createElement('div');
-        this.overlay.className = `card-foil-overlay finish-${this.options.finish}`;
-        
-        if (this.options.specular) {
-          this.overlay.classList.add('specular');
+      _onMove(e) {
+        const r = this.el.getBoundingClientRect();
+        const mx = (e.clientX - r.left) / r.width;
+        const my = (e.clientY - r.top) / r.height;
+        this._foil.style.backgroundPosition = `${mx * 100}% ${my * 100}%`;
+        if (this.tilt) {
+          const rx = (my - 0.5) * -30;
+          const ry = (mx - 0.5) * 30;
+          this.el.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+          this.el.style.transition = 'transform 0.05s';
         }
-
-        this.overlay.style.setProperty('--foil-intensity', this.options.intensity);
-
-        const parentPosition = window.getComputedStyle(this.element).position;
-        if (parentPosition === 'static') {
-          this.element.style.position = 'relative';
-        }
-
-        if (this.options.tilt) {
-          this.element.classList.add('card-foil-tilt');
-        }
-
-        this.element.appendChild(this.overlay);
-
-        this.element.addEventListener('mousemove', this.boundHandlers.mouseMove);
-        this.element.addEventListener('mouseleave', this.boundHandlers.mouseLeave);
-      }
-
-      handleMouseMove(e) {
-        const rect = this.element.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width;
-        const y = (e.clientY - rect.top) / rect.height;
-
-        this.overlay.style.setProperty('--mx', x);
-        this.overlay.style.setProperty('--my', y);
-
-        if (this.options.tilt) {
-          const tiltX = (x - 0.5) * 2;
-          const tiltY = (y - 0.5) * -2;
-          
-          this.element.style.setProperty('--tilt-x', tiltX);
-          this.element.style.setProperty('--tilt-y', tiltY);
-          this.element.classList.add('tilting');
+        if (this._spec) {
+          this._spec.style.opacity = '1';
+          this._spec.style.background = `radial-gradient(circle at ${mx*100}% ${my*100}%, rgba(255,255,255,0.35) 0%, transparent 55%)`;
         }
       }
 
-      handleMouseLeave() {
-        this.overlay.style.setProperty('--mx', 0.5);
-        this.overlay.style.setProperty('--my', 0.5);
-
-        if (this.options.tilt) {
-          this.element.style.setProperty('--tilt-x', 0);
-          this.element.style.setProperty('--tilt-y', 0);
-          this.element.classList.remove('tilting');
-        }
+      _onLeave() {
+        this._foil.style.backgroundPosition = '';
+        if (this.tilt) { this.el.style.transform = ''; this.el.style.transition = 'transform 0.4s ease'; }
+        if (this._spec) this._spec.style.opacity = '0';
       }
 
-      setFinish(finish) {
-        this.overlay.className = `card-foil-overlay finish-${finish}`;
-        if (this.options.specular) {
-          this.overlay.classList.add('specular');
-        }
-        this.options.finish = finish;
-      }
-
-      setIntensity(intensity) {
-        this.options.intensity = intensity;
-        this.overlay.style.setProperty('--foil-intensity', intensity);
-      }
-
+      setIntensity(v) { this.intensity = v; this._foil.style.opacity = v; }
+      setTilt(v) { this.tilt = v; if (!v) this.el.style.transform = ''; }
+      setSpecular(v) { this.specular = v; if (this._spec) this._spec.style.display = v ? '' : 'none'; }
       destroy() {
-        this.element.removeEventListener('mousemove', this.boundHandlers.mouseMove);
-        this.element.removeEventListener('mouseleave', this.boundHandlers.mouseLeave);
-
-        if (this.overlay && this.overlay.parentNode) {
-          this.overlay.parentNode.removeChild(this.overlay);
-        }
-
-        this.element.classList.remove('card-foil-tilt', 'tilting');
+        this.el.removeEventListener('mousemove', this._onMove);
+        this.el.removeEventListener('mouseleave', this._onLeave);
+        this._foil.remove(); this._spec?.remove();
       }
     }
 
-    // Initialize
-    const cards = document.querySelectorAll('.card');
-    const foilInstances = [];
+    const foils = ['c1','c2','c3','c4'].map(id => new CardFoil(document.getElementById(id)));
 
-    cards.forEach((card, index) => {
-      const finishes = ['foil', 'etched', 'galaxy', 'oil-slick'];
-      const foil = new CardFoil(card, {
-        finish: finishes[index % finishes.length],
-        intensity: 1.0,
-        tilt: true,
-        specular: true
-      });
-      foilInstances.push(foil);
+    document.getElementById('intensity').addEventListener('input', e => {
+      foils.forEach(f => f.setIntensity(+e.target.value));
     });
-
-    // Controls
-    const finishButtons = document.querySelectorAll('.finish-btn');
-    const intensitySlider = document.getElementById('intensity');
-    const intensityValue = document.getElementById('intensity-value');
-
-    finishButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        finishButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        const finish = btn.dataset.finish;
-        foilInstances.forEach(foil => foil.setFinish(finish));
-      });
+    document.getElementById('tilt').addEventListener('change', e => {
+      foils.forEach(f => f.setTilt(e.target.checked));
     });
-
-    intensitySlider.addEventListener('input', (e) => {
-      const value = parseFloat(e.target.value);
-      intensityValue.textContent = value.toFixed(1);
-      foilInstances.forEach(foil => foil.setIntensity(value));
+    document.getElementById('specular').addEventListener('change', e => {
+      foils.forEach(f => f.setSpecular(e.target.checked));
     });
   </script>
 </body>

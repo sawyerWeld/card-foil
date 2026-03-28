@@ -1,38 +1,33 @@
 class r {
-  constructor(e, t = {}) {
-    this.element = e, this.options = {
-      finish: "foil",
-      intensity: 1,
-      tilt: !0,
-      shimmer: !0,
-      specular: !0,
-      ...t
-    }, this.overlay = null, this.boundHandlers = {
-      mouseMove: this.handleMouseMove.bind(this),
-      mouseLeave: this.handleMouseLeave.bind(this)
-    }, this.init();
+  constructor(t, { intensity: e = 1, tilt: s = !0, specular: i = !0 } = {}) {
+    this.el = t, this.intensity = e, this.tilt = s, this.specular = i, t.style.position = "relative", t.style.display = t.style.display || "inline-block", this._foil = document.createElement("div"), this._foil.className = "cf-overlay", this._foil.style.opacity = e, t.appendChild(this._foil), i && (this._spec = document.createElement("div"), Object.assign(this._spec.style, {
+      position: "absolute",
+      inset: "0",
+      pointerEvents: "none",
+      borderRadius: "inherit",
+      mixBlendMode: "overlay",
+      opacity: "0",
+      transition: "opacity 0.2s",
+      background: "radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, transparent 60%)"
+    }), t.appendChild(this._spec)), this._onMove = this._onMove.bind(this), this._onLeave = this._onLeave.bind(this), t.addEventListener("mousemove", this._onMove), t.addEventListener("mouseleave", this._onLeave);
   }
-  init() {
-    this.overlay = document.createElement("div"), this.overlay.className = `card-foil-overlay finish-${this.options.finish}`, this.options.specular && this.overlay.classList.add("specular"), this.overlay.style.setProperty("--foil-intensity", this.options.intensity), window.getComputedStyle(this.element).position === "static" && (this.element.style.position = "relative"), this.options.tilt && this.element.classList.add("card-foil-tilt"), this.element.appendChild(this.overlay), this.element.addEventListener("mousemove", this.boundHandlers.mouseMove), this.element.addEventListener("mouseleave", this.boundHandlers.mouseLeave);
-  }
-  handleMouseMove(e) {
-    const t = this.element.getBoundingClientRect(), s = (e.clientX - t.left) / t.width, i = (e.clientY - t.top) / t.height;
-    if (this.overlay.style.setProperty("--mx", s), this.overlay.style.setProperty("--my", i), this.options.tilt) {
-      const o = (s - 0.5) * 2, l = (i - 0.5) * -2;
-      this.element.style.setProperty("--tilt-x", o), this.element.style.setProperty("--tilt-y", l), this.element.classList.add("tilting");
+  _onMove(t) {
+    const e = this.el.getBoundingClientRect(), s = (t.clientX - e.left) / e.width, i = (t.clientY - e.top) / e.height;
+    if (this._foil.style.backgroundPosition = `${s * 100}% ${i * 100}%`, this.tilt) {
+      const o = (i - 0.5) * -30, n = (s - 0.5) * 30;
+      this.el.style.transform = `perspective(600px) rotateX(${o}deg) rotateY(${n}deg)`, this.el.style.transition = "transform 0.05s";
     }
+    this._spec && (this._spec.style.opacity = "1", this._spec.style.background = `radial-gradient(circle at ${s * 100}% ${i * 100}%, rgba(255,255,255,0.35) 0%, transparent 55%)`);
   }
-  handleMouseLeave() {
-    this.overlay.style.setProperty("--mx", 0.5), this.overlay.style.setProperty("--my", 0.5), this.options.tilt && (this.element.style.setProperty("--tilt-x", 0), this.element.style.setProperty("--tilt-y", 0), this.element.classList.remove("tilting"));
+  _onLeave() {
+    this._foil.style.backgroundPosition = "", this.tilt && (this.el.style.transform = "", this.el.style.transition = "transform 0.4s ease"), this._spec && (this._spec.style.opacity = "0");
   }
-  setFinish(e) {
-    this.overlay.className = `card-foil-overlay finish-${e}`, this.options.specular && this.overlay.classList.add("specular"), this.options.finish = e;
-  }
-  setIntensity(e) {
-    this.options.intensity = e, this.overlay.style.setProperty("--foil-intensity", e);
+  setIntensity(t) {
+    this.intensity = t, this._foil.style.opacity = t;
   }
   destroy() {
-    this.element.removeEventListener("mousemove", this.boundHandlers.mouseMove), this.element.removeEventListener("mouseleave", this.boundHandlers.mouseLeave), this.overlay && this.overlay.parentNode && this.overlay.parentNode.removeChild(this.overlay), this.element.classList.remove("card-foil-tilt", "tilting");
+    var t;
+    this.el.removeEventListener("mousemove", this._onMove), this.el.removeEventListener("mouseleave", this._onLeave), this._foil.remove(), (t = this._spec) == null || t.remove();
   }
 }
 export {

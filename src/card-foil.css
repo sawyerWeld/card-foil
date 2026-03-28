@@ -1,125 +1,34 @@
-.card-foil-overlay {
+@keyframes foil-shift {
+  0% { background-position: 0% center; }
+  100% { background-position: 100% center; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cf-overlay {
+    animation: foil-shift 20s linear infinite;
+  }
+}
+
+.cf-card {
+  position: relative;
+  display: inline-block;
+}
+
+.cf-overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
-  overflow: hidden;
-  opacity: var(--foil-intensity, 1);
-}
-
-.card-foil-overlay::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--foil-gradient);
-  background-size: 200% 200%;
-  background-position: calc(50% + var(--mx, 0.5) * 50%) calc(50% + var(--my, 0.5) * 50%);
+  background: repeating-linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 200, 50, 0.25) 8%,
+    rgba(100, 220, 255, 0.18) 16%,
+    rgba(200, 100, 255, 0.15) 24%,
+    rgba(100, 255, 150, 0.18) 32%,
+    rgba(255, 150, 50, 0.15) 40%,
+    transparent 50%
+  );
+  background-size: 200% 100%;
   mix-blend-mode: screen;
-  animation: foil-shimmer 3s ease-in-out infinite;
-  transition: background-position 0.1s ease-out;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-foil-overlay::before {
-    animation: none;
-  }
-}
-
-.card-foil-overlay::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at calc(var(--mx, 0.5) * 100%) calc(var(--my, 0.5) * 100%),
-    rgba(255, 255, 255, 0.8) 0%,
-    rgba(255, 255, 255, 0.2) 20%,
-    transparent 60%
-  );
-  mix-blend-mode: overlay;
-  opacity: var(--specular-opacity, 0);
-  transition: opacity 0.15s ease-out;
-}
-
-.card-foil-overlay.specular::after {
-  opacity: 1;
-}
-
-/* Finish types */
-.card-foil-overlay.finish-foil {
-  --foil-gradient: linear-gradient(
-    135deg,
-    #ffd700 0%,
-    #00ffff 15%,
-    #ff00ff 30%,
-    #00ff00 45%,
-    #ff8800 60%,
-    #ffd700 75%,
-    #00ffff 90%,
-    #ff00ff 100%
-  );
-}
-
-.card-foil-overlay.finish-etched {
-  --foil-gradient: linear-gradient(
-    135deg,
-    #e0e0e0 0%,
-    #ffffff 20%,
-    #c0c0c0 40%,
-    #f0f0f0 60%,
-    #d0d0d0 80%,
-    #ffffff 100%
-  );
-}
-
-.card-foil-overlay.finish-galaxy {
-  --foil-gradient: linear-gradient(
-    135deg,
-    #1a0033 0%,
-    #4d0099 15%,
-    #0066cc 30%,
-    #6600cc 45%,
-    #000066 60%,
-    #9900ff 75%,
-    #0033cc 90%,
-    #1a0033 100%
-  );
-}
-
-.card-foil-overlay.finish-oil-slick {
-  --foil-gradient: linear-gradient(
-    135deg,
-    #ff0080 0%,
-    #00ffff 12%,
-    #8000ff 25%,
-    #ffff00 37%,
-    #00ff80 50%,
-    #ff0080 62%,
-    #0080ff 75%,
-    #ff00ff 87%,
-    #00ffff 100%
-  );
-}
-
-/* Shimmer animation */
-@keyframes foil-shimmer {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Tilt effect - applied to parent container */
-.card-foil-tilt {
-  transform-style: preserve-3d;
-  perspective: 600px;
-  transition: transform 0.3s ease-out;
-}
-
-.card-foil-tilt.tilting {
-  transform: 
-    rotateX(calc(var(--tilt-y, 0) * 15deg)) 
-    rotateY(calc(var(--tilt-x, 0) * 15deg));
-  transition: transform 0.1s ease-out;
 }

@@ -1,31 +1,14 @@
-import { useRef as f, useEffect as u } from "react";
-import { CardFoil as s } from "./index.mjs";
-function p({
-  finish: r = "foil",
-  intensity: t = 1,
-  tilt: l = !0,
-  shimmer: o = !0,
-  specular: a = !0
-}) {
-  const n = f(null), e = f(null);
-  return u(() => {
-    if (!n.current) return;
-    const c = n.current.parentElement;
-    if (c)
-      return e.current = new s(c, {
-        finish: r,
-        intensity: t,
-        tilt: l,
-        shimmer: o,
-        specular: a
-      }), () => {
-        e.current && e.current.destroy();
-      };
-  }, []), u(() => {
-    e.current && e.current.setFinish(r);
-  }, [r]), u(() => {
-    e.current && e.current.setIntensity(t);
-  }, [t]), /* @__PURE__ */ React.createElement("div", { ref: n, style: { display: "none" } });
+import { useRef as a, useEffect as f } from "react";
+import { CardFoil as l } from "./index.mjs";
+function p({ intensity: r = 1, tilt: t = !0, specular: n = !0, style: s, className: c }) {
+  const e = a(null);
+  return f(() => {
+    if (!e.current) return;
+    const o = e.current.parentElement;
+    if (!o) return;
+    const u = new l(o, { intensity: r, tilt: t, specular: n });
+    return () => u.destroy();
+  }, [r, t, n]), /* @__PURE__ */ React.createElement("span", { ref: e, style: { display: "none" } });
 }
 export {
   p as FoilOverlay,
