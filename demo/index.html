@@ -9,23 +9,23 @@
   <style>
     :root[data-theme="dark"] {
       --bg: #111;
-      --bg2: #1a1a1a;
       --border: #2a2a2a;
       --text: #e8e8e8;
       --text-muted: #666;
       --toggle-bg: #222;
       --toggle-border: #333;
       --thumb: #fff;
+      --link: #888;
     }
     :root[data-theme="light"] {
       --bg: #f1f1f1;
-      --bg2: #e4e4e4;
       --border: #d0d0d0;
       --text: #111;
       --text-muted: #888;
       --toggle-bg: #ddd;
       --toggle-border: #ccc;
       --thumb: #333;
+      --link: #666;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -60,8 +60,22 @@
       color: var(--text-muted);
     }
 
-    /* Theme toggle */
-    .theme-toggle {
+    .header-links {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+    }
+    .header-links a {
+      font-size: 0.75rem;
+      color: var(--link);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.15s;
+    }
+    .header-links a:hover { color: var(--text); }
+
+    /* Switch component */
+    .switch-row {
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -74,6 +88,7 @@
       position: relative;
       width: 36px;
       height: 20px;
+      flex-shrink: 0;
     }
     .switch input { display: none; }
     .track {
@@ -94,9 +109,7 @@
       border-radius: 50%;
       transition: transform 0.2s;
     }
-    input:checked + .track .thumb {
-      transform: translateX(16px);
-    }
+    input:checked + .track .thumb { transform: translateX(16px); }
 
     /* Cards */
     .cards {
@@ -128,7 +141,6 @@
       width: 100%;
       max-width: 400px;
     }
-
     .control-row {
       display: flex;
       align-items: center;
@@ -175,42 +187,20 @@
       text-align: right;
     }
 
-    /* Toggle buttons */
+    /* Toggle group */
     .toggle-group {
       display: flex;
-      gap: 0.5rem;
-    }
-    .toggle-btn {
-      padding: 0.3rem 0.75rem;
-      font-size: 0.72rem;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      font-family: inherit;
-      border: 1px solid var(--toggle-border);
-      border-radius: 4px;
-      background: var(--toggle-bg);
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .toggle-btn.active {
-      background: var(--text);
-      color: var(--bg);
-      border-color: var(--text);
+      gap: 1.5rem;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>card-foil</h1>
-    <label class="theme-toggle">
-      <span>Light</span>
-      <div class="switch">
-        <input type="checkbox" id="theme-check">
-        <div class="track"><div class="thumb"></div></div>
-      </div>
-    </label>
+    <div class="header-links">
+      <a href="https://github.com/sawyerWeld/card-foil" target="_blank">GitHub</a>
+      <a href="https://www.npmjs.com/package/card-foil" target="_blank">npm</a>
+    </div>
   </header>
 
   <div class="cards">
@@ -239,8 +229,27 @@
     <div class="control-row">
       <span class="control-label">Options</span>
       <div class="toggle-group">
-        <button class="toggle-btn active" id="btn-tilt">Tilt</button>
-        <button class="toggle-btn active" id="btn-specular">Specular</button>
+        <label class="switch-row">
+          <div class="switch">
+            <input type="checkbox" id="chk-tilt" checked>
+            <div class="track"><div class="thumb"></div></div>
+          </div>
+          <span>Tilt</span>
+        </label>
+        <label class="switch-row">
+          <div class="switch">
+            <input type="checkbox" id="chk-specular" checked>
+            <div class="track"><div class="thumb"></div></div>
+          </div>
+          <span>Specular</span>
+        </label>
+        <label class="switch-row">
+          <div class="switch">
+            <input type="checkbox" id="theme-check">
+            <div class="track"><div class="thumb"></div></div>
+          </div>
+          <span>Light</span>
+        </label>
       </div>
     </div>
   </div>
@@ -343,23 +352,15 @@
       foils.forEach(f => f.setIntensity(v));
     });
 
-    // Toggle buttons
-    function makeToggle(btnId, setter) {
-      const btn = document.getElementById(btnId);
-      let on = true;
-      btn.addEventListener('click', () => {
-        on = !on;
-        btn.classList.toggle('active', on);
-        foils.forEach(f => setter(f, on));
-      });
-    }
-    makeToggle('btn-tilt', (f, v) => f.setTilt(v));
-    makeToggle('btn-specular', (f, v) => f.setSpecular(v));
-
-    // Theme toggle
-    const themeCheck = document.getElementById('theme-check');
-    themeCheck.addEventListener('change', () => {
-      document.documentElement.setAttribute('data-theme', themeCheck.checked ? 'light' : 'dark');
+    // Switches
+    document.getElementById('chk-tilt').addEventListener('change', e => {
+      foils.forEach(f => f.setTilt(e.target.checked));
+    });
+    document.getElementById('chk-specular').addEventListener('change', e => {
+      foils.forEach(f => f.setSpecular(e.target.checked));
+    });
+    document.getElementById('theme-check').addEventListener('change', e => {
+      document.documentElement.setAttribute('data-theme', e.target.checked ? 'light' : 'dark');
     });
   </script>
 </body>
