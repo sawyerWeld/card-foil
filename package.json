@@ -2,22 +2,23 @@
   "name": "card-foil",
   "version": "0.1.0",
   "description": "Lightweight library for rendering foil/holographic card effects, inspired by MTG and Pokémon TCG",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./react": {
-      "import": "./dist/react.js",
-      "require": "./dist/react.cjs"
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
     },
     "./style.css": "./dist/style.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "vite build",
@@ -29,6 +30,7 @@
     "card",
     "mtg",
     "pokemon",
+    "tcg",
     "effect",
     "shimmer"
   ],
@@ -48,5 +50,9 @@
     "react-dom": {
       "optional": true
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sawyerWeld/card-foil.git"
   }
 }

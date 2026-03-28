@@ -12,6 +12,7 @@ export default defineConfig({
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {
+        exports: 'named',
         assetFileNames: 'style.css'
       }
     }
