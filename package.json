@@ -1,6 +1,6 @@
 {
   "name": "card-foil",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Lightweight library for rendering foil/holographic card effects, inspired by MTG and Pokemon TCG",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
