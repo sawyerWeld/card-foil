@@ -6,7 +6,8 @@ No framework dependencies for the core. Optional React wrapper included.
 
 ## Features
 
-- **4 finish types**: foil, etched, galaxy, oil-slick
+- **4 finish palettes**: foil, etched, galaxy, oil-slick
+- **Optional shimmer animation**: idle foil sweep that can be toggled independently
 - **Smooth mouse interactions**: tilt, specular highlights, gradient shifts
 - **Lightweight**: ~3KB gzipped
 - **Framework agnostic**: Works with vanilla JS, React, or any framework
@@ -72,7 +73,7 @@ function MyCard() {
 - `intensity`: number from `0` to `2`
 - `tilt`: boolean, enables 3D tilt on pointer move
 - `specular`: boolean, enables the white highlight layer
-- `shimmer`: boolean, enables background animation when motion is allowed
+- `shimmer`: boolean, enables the idle background sweep animation when motion is allowed
 
 ### Instance methods
 
@@ -82,6 +83,14 @@ function MyCard() {
 - `setSpecular(enabled)`
 - `setShimmer(enabled)`
 - `destroy()`
+
+## Finish Vs. Shimmer
+
+`finish` controls the color palette and overall foil look.
+
+`shimmer` does not change the finish. It only turns the idle animation on or off. When `shimmer` is `false`, the foil still responds to mouse movement, tilt, and specular highlights; it just stays still when the card is at rest.
+
+The shimmer animation is also automatically disabled for users who prefer reduced motion.
 
 ## Finish Types
 
@@ -99,7 +108,7 @@ function MyCard() {
 
 ## Demo
 
-See `demo/index.html` for a live interactive demo with all finish types.
+See `demo/index.html` for a live interactive demo with all four finish palettes plus the shimmer toggle.
 
 ## Browser Support
 
