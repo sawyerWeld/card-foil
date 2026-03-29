@@ -90,7 +90,7 @@ function MyCard() {
 
 `shimmer` does not change the finish. It only turns the idle animation on or off. When `shimmer` is `false`, the foil still responds to mouse movement, tilt, and specular highlights; it just stays still when the card is at rest.
 
-The shimmer animation is also automatically disabled for users who prefer reduced motion.
+The shimmer animation is also automatically disabled when the OS or browser is set to `prefers-reduced-motion: reduce`. On this machine, for example, macOS `reduceMotion` is enabled, so shimmer stays static even when the toggle is on.
 
 ## Finish Types
 

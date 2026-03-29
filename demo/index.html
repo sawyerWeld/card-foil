@@ -192,6 +192,12 @@
       display: flex;
       gap: 1.5rem;
     }
+    .motion-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
@@ -259,6 +265,9 @@
         </label>
       </div>
     </div>
+    <p class="motion-note" id="motion-note" hidden>
+      Shimmer is disabled because your system requests reduced motion.
+    </p>
   </div>
 
   <script>
@@ -278,6 +287,18 @@
 
     const slider = document.getElementById('intensity');
     const valDisplay = document.getElementById('intensity-val');
+    const shimmerCheckbox = document.getElementById('chk-shimmer');
+    const motionNote = document.getElementById('motion-note');
+    const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    function syncMotionUi() {
+      const reducedMotion = reducedMotionQuery.matches;
+      shimmerCheckbox.disabled = reducedMotion;
+      shimmerCheckbox.checked = !reducedMotion;
+      motionNote.hidden = !reducedMotion;
+      foils.forEach(f => f.setShimmer(!reducedMotion));
+    }
+
     slider.addEventListener('input', e => {
       const v = +e.target.value;
       valDisplay.textContent = v.toFixed(2);
@@ -299,6 +320,9 @@
     document.getElementById('theme-check').addEventListener('change', e => {
       document.documentElement.setAttribute('data-theme', e.target.checked ? 'light' : 'dark');
     });
+
+    syncMotionUi();
+    reducedMotionQuery.addEventListener('change', syncMotionUi);
     }
 
     if (location.protocol === 'file:') {
