@@ -108,7 +108,7 @@ The shimmer animation is also automatically disabled when the OS or browser is s
 
 ## Demo
 
-See `demo/index.html` for a live interactive demo with all four finish palettes plus the shimmer toggle.
+See the live demo at [sawyerwelden.com/card-foil](https://sawyerwelden.com/card-foil/) for all four finish palettes plus the shimmer toggle.
 
 ## Browser Support
 
