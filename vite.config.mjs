@@ -5,16 +5,16 @@ export default defineConfig({
     lib: {
       entry: {
         index: 'src/index.js',
-        react: 'src/react.jsx'
+        react: 'src/react.jsx',
       },
-      formats: ['es', 'cjs']
+      formats: ['es', 'cjs'],
     },
     rollupOptions: {
       external: ['react', 'react-dom'],
       output: {
         exports: 'named',
-        assetFileNames: 'style.css'
-      }
-    }
-  }
+        assetFileNames: 'style.css',
+      },
+    },
+  },
 });

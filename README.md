@@ -1,16 +1,16 @@
-# card-foil ✨
+# card-foil
 
-A lightweight library for rendering foil/holographic card effects, inspired by trading card games like Magic: The Gathering and Pokémon TCG.
+A lightweight library for rendering foil/holographic card effects, inspired by trading card games like Magic: The Gathering and Pokemon TCG.
 
 No framework dependencies for the core. Optional React wrapper included.
 
 ## Features
 
-- 🌈 **4 finish types**: foil, etched, galaxy, oil-slick
-- 🎨 **Smooth mouse interactions**: tilt, specular highlights, gradient shifts
-- ⚡ **Lightweight**: ~3KB gzipped
-- 🔧 **Framework agnostic**: Works with vanilla JS, React, or any framework
-- ♿ **Accessible**: Respects `prefers-reduced-motion`
+- **4 finish types**: foil, etched, galaxy, oil-slick
+- **Smooth mouse interactions**: tilt, specular highlights, gradient shifts
+- **Lightweight**: ~3KB gzipped
+- **Framework agnostic**: Works with vanilla JS, React, or any framework
+- **Accessible**: Respects `prefers-reduced-motion`
 
 ## Installation
 
@@ -28,16 +28,19 @@ import 'card-foil/style.css';
 
 const cardElement = document.querySelector('.my-card');
 const foil = new CardFoil(cardElement, {
-  finish: 'foil',        // 'foil' | 'etched' | 'galaxy' | 'oil-slick'
-  intensity: 1.0,        // 0-2, default 1.0
-  tilt: true,            // Enable 3D tilt on mousemove
-  specular: true,        // Enable specular highlight
-  shimmer: true          // Enable shimmer animation
+  finish: 'foil',
+  intensity: 1.0,
+  tilt: true,
+  specular: true,
+  shimmer: true
 });
 
 // Update dynamically
 foil.setFinish('galaxy');
 foil.setIntensity(1.5);
+foil.setTilt(false);
+foil.setSpecular(false);
+foil.setShimmer(false);
 
 // Clean up
 foil.destroy();
@@ -53,27 +56,43 @@ function MyCard() {
   return (
     <div style={{ position: 'relative', width: 300 }}>
       <img src="/card-image.jpg" alt="Card" />
-      <FoilOverlay 
-        finish="foil" 
-        intensity={1.2} 
-        tilt 
-        specular 
-      />
+      <FoilOverlay finish="foil" intensity={1.2} tilt specular shimmer />
     </div>
   );
 }
 ```
 
+`FoilOverlay` enhances its parent element, so render it inside the card wrapper you want to shimmer.
+
+## API
+
+### `new CardFoil(element, options?)`
+
+- `finish`: `'foil' | 'etched' | 'galaxy' | 'oil-slick'`
+- `intensity`: number from `0` to `2`
+- `tilt`: boolean, enables 3D tilt on pointer move
+- `specular`: boolean, enables the white highlight layer
+- `shimmer`: boolean, enables background animation when motion is allowed
+
+### Instance methods
+
+- `setFinish(finish)`
+- `setIntensity(value)`
+- `setTilt(enabled)`
+- `setSpecular(enabled)`
+- `setShimmer(enabled)`
+- `destroy()`
+
 ## Finish Types
 
-- **foil** — Rainbow shimmer (gold → cyan → purple → green → orange)
-- **etched** — Subtle silver/white shimmer, less saturated
-- **galaxy** — Deep blue/purple cosmic shimmer
-- **oil-slick** — Iridescent dark rainbow, high contrast
+- **foil** - Rainbow shimmer (gold -> cyan -> purple -> green -> orange)
+- **etched** - Subtle silver/white shimmer, less saturated
+- **galaxy** - Deep blue/purple cosmic shimmer
+- **oil-slick** - Iridescent dark rainbow, high contrast
 
 ## Mouse Interactions
 
-- **Tilt**: Applies `rotateX`/`rotateY` transforms (max ±15°) on mousemove
+- **Tilt**: Applies `rotateX`/`rotateY` transforms (max +/-15deg) on mousemove
 - **Specular**: White radial gradient follows mouse cursor
 - **Gradient shift**: Foil gradient moves based on mouse position
 - **Auto-reset**: Smoothly returns to neutral on mouseleave
@@ -86,10 +105,14 @@ See `demo/index.html` for a live interactive demo with all finish types.
 
 Works in all modern browsers (Chrome, Firefox, Safari, Edge). Requires CSS custom properties and `mix-blend-mode` support.
 
+## TypeScript
+
+The package ships declaration files for both `card-foil` and `card-foil/react`.
+
 ## License
 
 MIT
 
 ---
 
-Built with ✨ for card game enthusiasts.
+Built for card game enthusiasts.

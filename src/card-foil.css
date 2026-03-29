@@ -4,14 +4,13 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .cf-overlay {
+  .cf-overlay.cf-shimmer {
     animation: foil-shift 20s linear infinite;
   }
 }
 
-.cf-card {
-  position: relative;
-  display: inline-block;
+.cf-host {
+  transform-style: preserve-3d;
 }
 
 .cf-overlay {
@@ -19,7 +18,7 @@
   inset: 0;
   pointer-events: none;
   border-radius: inherit;
-  background: repeating-linear-gradient(
+  background: var(--cf-gradient, repeating-linear-gradient(
     110deg,
     transparent 0%,
     rgba(255, 200, 50, 0.25) 8%,
@@ -28,7 +27,18 @@
     rgba(100, 255, 150, 0.18) 32%,
     rgba(255, 150, 50, 0.15) 40%,
     transparent 50%
-  );
+  ));
   background-size: 200% 100%;
   mix-blend-mode: screen;
+}
+
+.cf-specular {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
 }
